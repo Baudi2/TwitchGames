@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TwichAppTest</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="download_data">Download data</string>
+    <string name="channels">Каналы:</string>
+    <string name="game">Игра:</string>
+    <string name="viewers">Зрители:</string>
+    <string name="game_logo">Game Logo</string>
+</resources>
