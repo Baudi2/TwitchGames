@@ -32,8 +32,7 @@ class GamesAdapter : PagingDataAdapter<GameItem, GamesAdapter.GamesViewHolder>(G
         fun bind(gameItem: GameItem) {
             with(binding) {
                 Glide.with(itemView)
-                    .load(gameItem.game.logo.medium)
-                    .centerCrop()
+                    .load(gameItem.game.logo.large)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .error(R.drawable.ic_cancel)
                     .into(gameLogo)

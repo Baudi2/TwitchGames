@@ -6,4 +6,9 @@
     <string name="game">Игра:</string>
     <string name="viewers">Зрители:</string>
     <string name="game_logo">Game Logo</string>
+    <string name="rate_our_app">Оцените наше приложение</string>
+    <string name="leave_review">Оставить отзыв</string>
+    <string name="send_review">Отправить</string>
+    <string name="result_couldnt_be_loaded">Невозможно загрузить данные</string>
+    <string name="retry_load">Попробовать снова</string>
 </resources>

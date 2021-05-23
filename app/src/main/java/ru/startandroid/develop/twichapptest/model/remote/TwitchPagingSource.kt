@@ -14,6 +14,8 @@ class TwitchPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GameItem> {
         val position = params.key ?: STARTING_PAGE_INDEX
 
+        twitchApi.getTopGames(params.loadSize, 10)
+
         return try {
             val response = twitchApi.getTopGames(params.loadSize, 1)
             val games = response.top

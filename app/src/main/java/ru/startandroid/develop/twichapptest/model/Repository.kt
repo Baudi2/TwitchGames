@@ -1,23 +1,50 @@
 package ru.startandroid.develop.twichapptest.model
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.liveData
+import androidx.lifecycle.LiveData
+import androidx.paging.*
+import ru.startandroid.develop.twichapptest.model.local.TwitchDataEntity
+import ru.startandroid.develop.twichapptest.model.local.TwitchDatabase
+import ru.startandroid.develop.twichapptest.model.local.TwitchRemoteMediator
+import ru.startandroid.develop.twichapptest.model.remote.GameItem
 import ru.startandroid.develop.twichapptest.model.remote.TwitchApi
-import ru.startandroid.develop.twichapptest.model.remote.TwitchPagingSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class Repository @Inject constructor(private val twitchApi: TwitchApi) {
+class Repository @Inject constructor(
+    private val twitchApi: TwitchApi,
+    private val database: TwitchDatabase
+) {
 
-    fun getTopGames() =
-        Pager(
+    companion object {
+        const val NETWORK_PAGE_SIZE = 15
+    }
+
+    fun getTopGames() : LiveData<PagingData<GameItem>> {
+        val pagingSourceFactory = {database.gamesDao().getAllGames()}
+
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = NETWORK_PAGE_SIZE,
                 maxSize = 100,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { TwitchPagingSource(twitchApi) }
+            remoteMediator = TwitchRemoteMediator(
+                twitchApi,
+                database
+            ),
+            pagingSourceFactory = pagingSourceFactory
         ).liveData
+    }
+
+//    fun getTopGames() =
+//        Pager(
+//            config = PagingConfig(
+//                pageSize = 5,
+//                maxSize = 100,
+//                enablePlaceholders = false
+//            ),
+//            pagingSourceFactory = { TwitchPagingSource(twitchApi) }
+//        ).liveData
 }
