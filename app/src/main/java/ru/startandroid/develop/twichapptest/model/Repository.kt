@@ -2,7 +2,6 @@ package ru.startandroid.develop.twichapptest.model
 
 import androidx.lifecycle.LiveData
 import androidx.paging.*
-import ru.startandroid.develop.twichapptest.model.local.TwitchDataEntity
 import ru.startandroid.develop.twichapptest.model.local.TwitchDatabase
 import ru.startandroid.develop.twichapptest.model.local.TwitchRemoteMediator
 import ru.startandroid.develop.twichapptest.model.remote.GameItem

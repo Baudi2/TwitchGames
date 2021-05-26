@@ -18,7 +18,7 @@ class TwitchRemoteMediator @Inject constructor(
     private val api: TwitchApi,
     private val gameDatabase: TwitchDatabase
 ) : RemoteMediator<Int, GameItem>() {
-    private lateinit var entityGames: ArrayList<TwitchDataEntity>
+    //private lateinit var entityGames: ArrayList<TwitchDataEntity>
 
     override suspend fun load(
         loadType: LoadType,
@@ -32,13 +32,17 @@ class TwitchRemoteMediator @Inject constructor(
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                if (prevKey == null) {
+                    return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                }
                 prevKey
             }
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                if (nextKey == null) {
+                    return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                }
                 nextKey
             }
         }
@@ -58,25 +62,25 @@ class TwitchRemoteMediator @Inject constructor(
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = games.map {
                     RemoteKeysEntity(
-                        gameId = it.game.id.toLong(),
+                        gameId = it.game?.id!!.toLong(),
                         prevKey = prevKey,
                         nextKey = nextKey
                     )
                 }
 
-                games.forEach {
-                    val temp = TwitchDataEntity(
-                        it.game.id.toLong(),
-                        it.viewers.toString(),
-                        it.channels.toString(),
-                        it.game.logo.large,
-                        it.game.name
-                    )
-                    entityGames.add(temp)
-                }
+//                games.forEach {
+//                    val temp = TwitchDataEntity(
+//                        it.game.id.toLong(),
+//                        it.viewers.toString(),
+//                        it.channels.toString(),
+//                        it.game.logo.large,
+//                        it.game.name
+//                    )
+//                    entityGames.add(temp)
+//                }
 
                 gameDatabase.remoteKeysDao().insertAll(keys)
-                gameDatabase.gamesDao().insertGames(entityGames)
+                gameDatabase.gamesDao().insertGames(games)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
@@ -86,21 +90,21 @@ class TwitchRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
+        return state.pages.lastOrNull() {it.data.isNotEmpty()}?.data?.lastOrNull()
             ?.let { game ->
-                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game.id.toLong())
+                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?.id!!.toLong())
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
-        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull()
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
+        return state.pages.firstOrNull() {it.data.isNotEmpty()}?.data?.firstOrNull()
             ?.let { game ->
-                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game.id.toLong())
+                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?.id!!.toLong())
             }
     }
 
-    private suspend fun getKeyClosestToCurrentPosition(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
+    private suspend fun getKeyClosestToCurrentPosition(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.game?.id?.toLong()?.let { gameId ->
                 gameDatabase.remoteKeysDao().remoteKeysGameId(gameId)
