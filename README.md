@@ -16,8 +16,6 @@
 
 ### **Стек использованных технологий:**
 
-● Kotlin
-
 ● Kotlin Coroutines
 
 ● Room DB
