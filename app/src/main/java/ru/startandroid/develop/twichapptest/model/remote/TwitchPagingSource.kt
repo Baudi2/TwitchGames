@@ -14,16 +14,15 @@ class TwitchPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GameItem> {
         val position = params.key ?: STARTING_PAGE_INDEX
 
-        twitchApi.getTopGames(params.loadSize, 10)
+        twitchApi.getTopGames(params.loadSize, 10).top
 
         return try {
-            val response = twitchApi.getTopGames(params.loadSize, 1)
-            val games = response.top
+            val response = twitchApi.getTopGames(params.loadSize, 1).top
 
             LoadResult.Page(
-                data = games,
+                data = response,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = if (games.isEmpty()) null else position + 1
+                nextKey = if (response.isEmpty()) null else position + 1
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)

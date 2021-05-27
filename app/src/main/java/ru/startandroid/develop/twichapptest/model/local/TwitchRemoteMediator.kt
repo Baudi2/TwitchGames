@@ -48,10 +48,9 @@ class TwitchRemoteMediator @Inject constructor(
         }
 
         try {
-            val apiResponse = api.getTopGames(state.config.pageSize, page)
+            val apiResponse = api.getTopGames(state.config.pageSize, page).top
 
-            val games = apiResponse.top
-            val endOfPaginationReached = games.isEmpty()
+            val endOfPaginationReached = apiResponse.isEmpty()
 
             gameDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -60,9 +59,9 @@ class TwitchRemoteMediator @Inject constructor(
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
-                val keys = games.map {
+                val keys = apiResponse.map {
                     RemoteKeysEntity(
-                        gameId = it.game?.id!!.toLong(),
+                        gameId = it.game?.id?.toLong(),
                         prevKey = prevKey,
                         nextKey = nextKey
                     )
@@ -80,7 +79,7 @@ class TwitchRemoteMediator @Inject constructor(
 //                }
 
                 gameDatabase.remoteKeysDao().insertAll(keys)
-                gameDatabase.gamesDao().insertGames(games)
+                gameDatabase.gamesDao().insertGames(apiResponse)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {

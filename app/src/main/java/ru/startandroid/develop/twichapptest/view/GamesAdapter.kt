@@ -32,13 +32,13 @@ class GamesAdapter : PagingDataAdapter<GameItem, GamesAdapter.GamesViewHolder>(G
         fun bind(gameItem: GameItem) {
             with(binding) {
                 Glide.with(itemView)
-                    .load(gameItem.game.logo.large)
+                    .load(gameItem.game?.logo?.large)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .error(R.drawable.ic_cancel)
                     .into(gameLogo)
 
                 viewersCounter.text = gameItem.viewers.toString()
-                nameOfTheGame.text = gameItem.game.name
+                nameOfTheGame.text = gameItem.game?.name
                 channelsCounter.text = gameItem.channels.toString()
             }
         }
@@ -46,7 +46,7 @@ class GamesAdapter : PagingDataAdapter<GameItem, GamesAdapter.GamesViewHolder>(G
 
     class GameComparator : DiffUtil.ItemCallback<GameItem>() {
         override fun areItemsTheSame(oldItem: GameItem, newItem: GameItem) =
-            oldItem.game.id == newItem.game.id
+            oldItem.game?.id == newItem.game?.id
 
         override fun areContentsTheSame(oldItem: GameItem, newItem: GameItem) =
             oldItem == newItem
