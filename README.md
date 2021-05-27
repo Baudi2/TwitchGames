@@ -13,3 +13,23 @@
 ● Динамически подгружать новые данные в фоне при пролистывании списка.
 
 ● Форма для отзыва о приложении (рейтинг бар + текстовое поле для отзыва + кнопка отправки отзыва).
+
+Стек использованных технологий:
+
+● Kotlin Coroutines
+
+● Room DB
+
+● Recycler View
+
+● Retrofit + Gson conveter
+
+● Glide
+
+● Navigation Component
+
+● Dagger Hilt
+
+● LiveData
+
+● Paging 3
