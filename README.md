@@ -16,6 +16,8 @@
 
 ### **Стек использованных технологий:**
 
+● Kotlin
+
 ● Kotlin Coroutines
 
 ● Room DB
@@ -33,3 +35,5 @@
 ● LiveData
 
 ● Paging 3
+
+● View Binding
