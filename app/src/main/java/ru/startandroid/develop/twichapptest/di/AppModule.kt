@@ -8,8 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.startandroid.develop.twichapptest.model.local.TwitchDatabase
-import ru.startandroid.develop.twichapptest.model.remote.TwitchApi
+import ru.startandroid.develop.twichapptest.model.api.TwitchApi
+import ru.startandroid.develop.twichapptest.model.db.TwitchDatabase
 import javax.inject.Singleton
 
 @Module

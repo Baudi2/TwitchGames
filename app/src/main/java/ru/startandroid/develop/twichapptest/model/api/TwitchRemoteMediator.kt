@@ -1,4 +1,4 @@
-package ru.startandroid.develop.twichapptest.model.local
+package ru.startandroid.develop.twichapptest.model.api
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -6,8 +6,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import retrofit2.HttpException
-import ru.startandroid.develop.twichapptest.model.remote.GameItem
-import ru.startandroid.develop.twichapptest.model.remote.TwitchApi
+import ru.startandroid.develop.twichapptest.model.data.GameItem
+import ru.startandroid.develop.twichapptest.model.data.RemoteKeysEntity
+import ru.startandroid.develop.twichapptest.model.db.TwitchDatabase
 import java.io.IOException
 import javax.inject.Inject
 
@@ -18,7 +19,6 @@ class TwitchRemoteMediator @Inject constructor(
     private val api: TwitchApi,
     private val gameDatabase: TwitchDatabase
 ) : RemoteMediator<Int, GameItem>() {
-    //private lateinit var entityGames: ArrayList<TwitchDataEntity>
 
     override suspend fun load(
         loadType: LoadType,
@@ -32,23 +32,19 @@ class TwitchRemoteMediator @Inject constructor(
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
-                if (prevKey == null) {
-                    return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                }
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 prevKey
             }
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
-                if (nextKey == null) {
-                    return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                }
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 nextKey
             }
         }
 
         try {
-            val apiResponse = api.getTopGames(state.config.pageSize, page).top
+            val apiResponse = api.getTopGames(state.config.pageSize, 0).top
 
             val endOfPaginationReached = apiResponse.isEmpty()
 
@@ -61,22 +57,11 @@ class TwitchRemoteMediator @Inject constructor(
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = apiResponse.map {
                     RemoteKeysEntity(
-                        gameId = it.game?.id?.toLong(),
+                        gameId = it.game?._id?.toLong(),
                         prevKey = prevKey,
                         nextKey = nextKey
                     )
                 }
-
-//                games.forEach {
-//                    val temp = TwitchDataEntity(
-//                        it.game.id.toLong(),
-//                        it.viewers.toString(),
-//                        it.channels.toString(),
-//                        it.game.logo.large,
-//                        it.game.name
-//                    )
-//                    entityGames.add(temp)
-//                }
 
                 gameDatabase.remoteKeysDao().insertAll(keys)
                 gameDatabase.gamesDao().insertGames(apiResponse)
@@ -89,23 +74,23 @@ class TwitchRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
-        return state.pages.lastOrNull() {it.data.isNotEmpty()}?.data?.lastOrNull()
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { game ->
-                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?.id!!.toLong())
+                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?._id!!.toLong())
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
-        return state.pages.firstOrNull() {it.data.isNotEmpty()}?.data?.firstOrNull()
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { game ->
-                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?.id!!.toLong())
+                gameDatabase.remoteKeysDao().remoteKeysGameId(game.game?._id!!.toLong())
             }
     }
 
-    private suspend fun getKeyClosestToCurrentPosition(state: PagingState<Int, GameItem>) : RemoteKeysEntity? {
+    private suspend fun getKeyClosestToCurrentPosition(state: PagingState<Int, GameItem>): RemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.game?.id?.toLong()?.let { gameId ->
+            state.closestItemToPosition(position)?.game?._id?.toLong()?.let { gameId ->
                 gameDatabase.remoteKeysDao().remoteKeysGameId(gameId)
             }
         }

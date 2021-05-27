@@ -1,4 +1,4 @@
-package ru.startandroid.develop.twichapptest.model.remote
+package ru.startandroid.develop.twichapptest.model.data
 
 data class ImageUrl(
     val large: String,

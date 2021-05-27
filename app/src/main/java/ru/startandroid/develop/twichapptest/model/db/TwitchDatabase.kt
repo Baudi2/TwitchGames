@@ -1,15 +1,15 @@
-package ru.startandroid.develop.twichapptest.model.local
+package ru.startandroid.develop.twichapptest.model.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ru.startandroid.develop.twichapptest.model.Converters
-import ru.startandroid.develop.twichapptest.model.remote.Game
-import ru.startandroid.develop.twichapptest.model.remote.GameItem
+import ru.startandroid.develop.twichapptest.model.data.Game
+import ru.startandroid.develop.twichapptest.model.data.GameItem
+import ru.startandroid.develop.twichapptest.model.data.RemoteKeysEntity
 
 @Database(
     entities = [GameItem::class, Game::class, RemoteKeysEntity::class],
-    version = 14
+    version = 17
 )
 @TypeConverters(Converters::class)
 abstract class TwitchDatabase : RoomDatabase() {

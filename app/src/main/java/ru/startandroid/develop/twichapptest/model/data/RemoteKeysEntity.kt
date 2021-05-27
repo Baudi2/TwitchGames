@@ -1,4 +1,4 @@
-package ru.startandroid.develop.twichapptest.model.local
+package ru.startandroid.develop.twichapptest.model.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

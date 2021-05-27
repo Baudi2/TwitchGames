@@ -33,7 +33,12 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         with(binding) {
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = layoutManager
-            recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
             recyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
                 header = TwitchLoadStateAdapter { adapter.refresh() },
                 footer = TwitchLoadStateAdapter { adapter.refresh() }

@@ -1,4 +1,4 @@
-package ru.startandroid.develop.twichapptest.model.remote
+package ru.startandroid.develop.twichapptest.model.data
 
 import androidx.room.Embedded
 import androidx.room.Entity

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainFragmentViewModel @Inject constructor(
-    private val repository: Repository
+    repository: Repository
 ) : ViewModel() {
 
     val games = repository.getTopGames().cachedIn(viewModelScope)

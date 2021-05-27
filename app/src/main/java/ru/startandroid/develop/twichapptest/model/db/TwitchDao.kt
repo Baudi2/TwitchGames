@@ -1,11 +1,11 @@
-package ru.startandroid.develop.twichapptest.model.local
+package ru.startandroid.develop.twichapptest.model.db
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.startandroid.develop.twichapptest.model.remote.GameItem
+import ru.startandroid.develop.twichapptest.model.data.GameItem
 
 @Dao
 interface TwitchDao {

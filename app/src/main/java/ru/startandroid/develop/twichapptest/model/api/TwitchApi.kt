@@ -1,8 +1,9 @@
-package ru.startandroid.develop.twichapptest.model.remote
+package ru.startandroid.develop.twichapptest.model.api
 
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
+import ru.startandroid.develop.twichapptest.model.data.TopGames
 
 interface TwitchApi {
     companion object {

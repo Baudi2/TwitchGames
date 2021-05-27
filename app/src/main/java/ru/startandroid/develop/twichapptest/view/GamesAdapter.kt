@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ru.startandroid.develop.twichapptest.R
 import ru.startandroid.develop.twichapptest.databinding.TwitchItemBinding
-import ru.startandroid.develop.twichapptest.model.remote.GameItem
+import ru.startandroid.develop.twichapptest.model.data.GameItem
 
 class GamesAdapter : PagingDataAdapter<GameItem, GamesAdapter.GamesViewHolder>(GameComparator()) {
 
@@ -46,7 +46,7 @@ class GamesAdapter : PagingDataAdapter<GameItem, GamesAdapter.GamesViewHolder>(G
 
     class GameComparator : DiffUtil.ItemCallback<GameItem>() {
         override fun areItemsTheSame(oldItem: GameItem, newItem: GameItem) =
-            oldItem.game?.id == newItem.game?.id
+            oldItem.game?._id == newItem.game?._id
 
         override fun areContentsTheSame(oldItem: GameItem, newItem: GameItem) =
             oldItem == newItem

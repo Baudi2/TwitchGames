@@ -1,7 +1,7 @@
 package ru.startandroid.develop.twichapptest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = binding.toolbar
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
         navController = navHostFragment.findNavController()
 
         setSupportActionBar(toolbar)

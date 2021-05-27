@@ -1,9 +1,10 @@
-package ru.startandroid.develop.twichapptest.model.local
+package ru.startandroid.develop.twichapptest.model.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import ru.startandroid.develop.twichapptest.model.data.RemoteKeysEntity
 
 @Dao
 interface RemoteKeysDao {

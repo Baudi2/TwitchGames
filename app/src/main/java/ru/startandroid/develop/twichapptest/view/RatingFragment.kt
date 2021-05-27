@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import ru.startandroid.develop.twichapptest.R
 import ru.startandroid.develop.twichapptest.databinding.RatingFragmentBinding
 
-class RatingFragment: DialogFragment(R.layout.rating_fragment) {
+class RatingFragment : DialogFragment(R.layout.rating_fragment) {
     private lateinit var binding: RatingFragmentBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

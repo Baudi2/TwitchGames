@@ -4,12 +4,10 @@
     <item
         android:id="@+id/rating"
         android:title="@string/rate_the_app"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/download_data"
         android:title="@string/download_data"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 </menu>
